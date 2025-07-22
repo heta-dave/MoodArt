@@ -1,6 +1,6 @@
 async function getMood() {
   const input = document.getElementById("moodInput").value;
-  const res = await fetch("http://localhost:5000/predict", {
+  const res = await fetch("https://moodart.onrender.com/predict", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text: input })
