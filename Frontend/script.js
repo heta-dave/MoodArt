@@ -5,9 +5,18 @@ async function getMood() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text: input })
   });
+
   const data = await res.json();
+
+  console.log("Backend returned:", data);  // 🔍 Add this
+  if (!data.mood) {
+    alert("No mood returned from server.");
+    return;
+  }
+
   renderMoodArt(data.mood);
 }
+
 
 function renderMoodArt(mood) {
   document.getElementById("three-canvas").innerHTML = ""; // clear previous
