@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+}
+
+#input-area {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.5);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+textarea {
+  width: 250px;
+  height: 60px;
+  margin-bottom: 10px;
+}
