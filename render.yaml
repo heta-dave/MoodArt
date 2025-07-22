@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: moodcanvas-backend
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    workingDir: Backend
