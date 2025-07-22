@@ -1,55 +1,62 @@
-async function getMood() {
-  const input = document.getElementById("moodInput").value;
-  const res = await fetch("https://moodart.onrender.com/predict", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: input })
-  });
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("generateBtn").addEventListener("click", getMood);
 
-  const data = await res.json();
+  async function getMood() {
+    const input = document.getElementById("moodInput").value;
+    try {
+      const res = await fetch("https://moodart.onrender.com/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: input })
+      });
 
-  console.log("Backend returned:", data);  // 🔍 Add this
-  if (!data.mood) {
-    alert("No mood returned from server.");
-    return;
+      if (!res.ok) throw new Error("Network response was not ok");
+
+      const data = await res.json();
+      renderMoodArt(data.mood);
+    } catch (err) {
+      console.error("Error fetching mood:", err);
+    }
   }
 
-  renderMoodArt(data.mood);
-}
+  function renderMoodArt(mood) {
+    document.getElementById("three-canvas").innerHTML = ""; // clear previous canvas
 
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById("three-canvas").appendChild(renderer.domElement);
 
-function renderMoodArt(mood) {
-  document.getElementById("three-canvas").innerHTML = ""; // clear previous
+    let geometry, material;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.getElementById("three-canvas").appendChild(renderer.domElement);
+    if (mood === "joy") {
+      geometry = new THREE.TorusKnotGeometry();
+      material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true });
+    } else if (mood === "sadness") {
+      geometry = new THREE.SphereGeometry(5, 32, 32);
+      material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+    } else {
+      geometry = new THREE.BoxGeometry();
+      material = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true });
+    }
 
-  let geometry, material;
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    camera.position.z = 20;
 
-  if (mood === "joy") {
-    geometry = new THREE.TorusKnotGeometry();
-    material = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true });
-  } else if (mood === "sadness") {
-    geometry = new THREE.SphereGeometry(5, 32, 32);
-    material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-  } else {
-    geometry = new THREE.BoxGeometry();
-    material = new THREE.MeshBasicMaterial({ color: 0xff00ff, wireframe: true });
+    function animate() {
+      requestAnimationFrame(animate);
+      mesh.rotation.x += 0.01;
+      mesh.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    animate();
   }
-
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-  camera.position.z = 20;
-
-  function animate() {
-    requestAnimationFrame(animate);
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
-    renderer.render(scene, camera);
-  }
-
-  animate();
-}
+});
