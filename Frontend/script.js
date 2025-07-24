@@ -1,5 +1,4 @@
 document.getElementById("generateBtn").addEventListener("click", getMood);
-import * as THREE from './modules/three.module.js';
 
 async function getMood() {
   const input = document.getElementById("moodInput").value;
