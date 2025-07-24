@@ -1,4 +1,4 @@
-console.log("THREE is:", typeof THREE); // should log 'object'
+import * as THREE from "https://cdn.skypack.dev/three";
 
 document.getElementById("generateBtn").addEventListener("click", getMood);
 
