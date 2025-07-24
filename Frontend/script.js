@@ -1,3 +1,5 @@
+console.log("THREE is:", typeof THREE); // should log 'object'
+
 document.getElementById("generateBtn").addEventListener("click", getMood);
 
 async function getMood() {
